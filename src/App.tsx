@@ -9,6 +9,7 @@ interface CardProps {
 function App() {
   const [currentCard, setCurrentCard] = useState<CardProps | null>(null);
   const [deck, setDeck] = useState<CardProps[]>([]);
+  const [colorFund, setColorFund] = useState("#ffffff");
 
   useEffect(() => {
     const pint = ["♠️", "♥️", "♦️", "♣️"];
@@ -51,7 +52,44 @@ function App() {
     setDeck(remainingDeck);
   };
 
-  const [colorFund, setColorFund] = useState("#ffffff");
+  const createDeck = () => {
+    const pint = ["♠️", "♥️", "♦️", "♣️"];
+    const value = [
+      "A",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "J",
+      "Q",
+      "K",
+    ];
+    let newDeck: CardProps[] = [];
+
+    pint.forEach((pints) => {
+      value.forEach((values) => {
+        newDeck.push({ value: values, pint: pints });
+      });
+    });
+    newDeck.sort();
+    return newDeck;
+  };
+
+  useEffect(() => {
+    const deckFresh = createDeck();
+    setDeck(deckFresh);
+  }, []);
+
+  const resetGame = () => {
+    setCurrentCard(null);
+    setDeck(createDeck);
+  };
+
   return (
     <div className="container" style={{ backgroundColor: colorFund }}>
       <div
@@ -68,6 +106,7 @@ function App() {
             Draw a card
           </button>
           <button
+            onClick={resetGame}
             style={{ display: "flex", padding: "20px", fontSize: "16px" }}
           >
             Restart Game
